@@ -1,0 +1,16 @@
+<%- include("./layouts/header");-%>
+
+
+    <% page.forEach((p)=>{%>
+
+        <% if(p.title===title ) {%>
+
+            <p>
+                <%=p.content %>
+            </p>
+
+            <% } %>
+                <% }) %>
+
+
+                    <%- include("./layouts/footer");-%>

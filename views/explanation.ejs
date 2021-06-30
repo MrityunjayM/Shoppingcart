@@ -1,16 +1,16 @@
 <%- include("./layouts/header");-%>
 
+    <div class="container my-3">
+        <% page.forEach((p)=>{%>
+    
+            <% if(p.title == title ) {%>
+    
+                <p>
+                    <%= p.content %>
+                </p>
+    
+                <% } %>
+        <% }) %>
+    </div>
 
-    <% page.forEach((p)=>{%>
-
-        <% if(p.title===title ) {%>
-
-            <p>
-                <%=p.content %>
-            </p>
-
-            <% } %>
-                <% }) %>
-
-
-                    <%- include("./layouts/footer");-%>
+<%- include("./layouts/footer");-%>

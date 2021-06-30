@@ -15,7 +15,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-        <div class="container-fluid">
+        <div class="container">
             <a class="navbar-brand" href="/">cmsShoppingCart</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -31,7 +31,6 @@
                         <a class="nav-link active" href="/products">Products</a>
                     </li>
 
-
                     <% page.forEach((p)=>{%>
 
                         <li class="nav-link text-capitalize">
@@ -40,7 +39,7 @@
                             </a>
                         </li>
 
-                        <% }) %>
+                    <% }) %>
 
                 </ul>
                 <div class="navbar-nav ms-auto">
@@ -54,9 +53,9 @@
                                 <% if(!currentUser) {%>
                                     <a href="/users/login" class="nav-link">Login</a>
                                     <a href="/users/register" class="nav-link">Register</a>
-                                    <% }else{ %>
+                                <% }else{ %>
                                         <a href="/users/logout" class="nav-link">Logout</a>
-                                        <% } %>
+                                <% } %>
                 </div>
             </div>
         </div>

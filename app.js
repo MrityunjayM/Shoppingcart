@@ -2,6 +2,7 @@ if (process.env.NODE_ENV !== "production") {
     require('dotenv').config();
 }
 const express = require('express');
+const config = require('./config');
 const path = require('path');
 const mongoose = require('mongoose');
 // const ejsMate = require('ejs-mate');
@@ -13,19 +14,15 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user');
 
-
-
-
 const Categories = require("./routes/admin_categories");
 const Pages = require("./routes/pages")
 const Product = require("./routes/admin_product");
 const Users = require("./routes/user");
 const admin_pages = require("./routes/admin_pages");
-const Userproduct = require("./routes/product");
+// const Userproduct = require("./routes/product");
 const payment = require("./routes/payment");
 
-
-mongoose.connect('mongodb://localhost:27017/shoppingcart', {
+mongoose.connect(process.env.MONGO_ATLAS_URL, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
@@ -38,22 +35,18 @@ db.once("open", () => {
     console.log("Database connected");
 });
 
-
-
 const app = express();
 
 // app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'))
-
+app.set('views', './views');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')))
 
-
 const sessionConfig = {
-    secret: 'thisshouldbeabettersecret!',
+    secret: process.env.SECRET_KEY,
     resave: !false,
     saveUninitialized: true,
     cookie: {
@@ -66,8 +59,6 @@ const sessionConfig = {
 app.use(session(sessionConfig))
 app.use(flash());
 
-
-
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
@@ -75,9 +66,8 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-
 app.use((req, res, next) => {
-    // console.log(req.session)
+
     res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
@@ -90,9 +80,8 @@ app.use("/admin/pages", admin_pages);
 app.use("/admin/categories", Categories);
 app.use("/users", Users);
 app.use("/", Pages);
-app.use("/product", Userproduct);
+// app.use("/product", Userproduct);
 app.use("/", payment);
-
 
 const handleValidationErr = err => {
     // console.dir(err);
@@ -104,8 +93,7 @@ app.use((err, req, res, next) => {
     //We can single out particular types of Mongoose Errors:
     if (err.name === 'ValidationError') err = handleValidationErr(err)
     next(err);
-})
-
+});
 
 app.use((err, req, res, next) => {
     const { statusCode = 500, message = 'Something went wrong' } = err;
@@ -116,16 +104,6 @@ app.use((err, req, res, next) => {
 
 });
 
-
-// app.get('*', (req, res, next) => {
-//     res.locals.cart = req.session.cart;
-//     console.log(res.locals.cart)
-//     console.log(req.session.cart)
-//     // res.locals.user = req.user || null;
-//     next();
-// });
-
-
-app.listen(3000, () => {
-    console.log("APP IS LISTENING ON PORT 3000!")
-})
+app.listen(process.env.PORT, () => {
+    console.log(`APP IS LISTENING ON PORT http://${process.env.HOST}:${process.env.PORT}`)
+});

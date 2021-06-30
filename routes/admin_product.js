@@ -41,7 +41,6 @@ router.post("/add-product", isLoggedIn, isAdmin, upload.array("image"), (req, re
     // console.log(req.files);
     if (!newProduct.title || !newProduct.desc || !newProduct.price) {
         return next(new AppError("please fill up all field", 400));
-
     }
 
     newProduct.save();

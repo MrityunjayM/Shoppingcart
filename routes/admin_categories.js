@@ -10,7 +10,7 @@ router.get("/", wrapAsync(async (req, res, next) => {
     try {
         const category = await Category.find({});
         res.render("admin/category", { category });
-        throw new AppError("something went wrong", 400);
+        // throw new AppError("something went wrong", 400);
     }
     catch (e) {
         next(e);

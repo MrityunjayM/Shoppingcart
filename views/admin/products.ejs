@@ -2,10 +2,8 @@
 
     <h2 class="page-title">Products</h2>
 
-
     <a href="/admin/products/add-product" class="btn btn-primary">Add a new product</a>
-    <br><br>
-
+    <br>
 
     <table class="table table-striped alignmiddle">
         <thead>
@@ -52,22 +50,22 @@
                                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                     <span class="visually-hidden">Next</span>
                                 </button>
-                                <% } %>
+                            <% } %>
                         </div>
-
-
                     </td>
-
-
-
-                    <td><a href="/admin/products/edit-product/<%= product._id %>">Edit</a></td>
-                    <td><a class="confirmDeletion" href="/admin/products/delete-product/<%= product._id %>">Delete</a>
+                    <td>
+                        <a href="/admin/products/edit-product/<%= product._id %>" class="text-primary">
+                            <%- include('../partials/editButton'); %>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="confirmDeletion text-danger" href="/admin/products/edit-product/<%= product._id %>/delete">
+                            <%- include('../partials/deleteButton'); %>
+                        </a>
                     </td>
                 </tr>
                 <% }); %>
         </tbody>
     </table>
 
-
-
-    <%- include('../layouts/adminfooter'); -%>
+<%- include('../layouts/adminfooter'); -%>

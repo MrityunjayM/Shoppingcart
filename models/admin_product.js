@@ -1,7 +1,8 @@
 
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
-const ImageSchema = new mongoose.Schema({
+const ImageSchema = new Schema({
     url: String,
     filename: String
 });
@@ -10,7 +11,7 @@ ImageSchema.virtual('thumbnail').get(function () {
     return this.url.replace('/upload', '/upload/w_200');
 });
 
-const productSchema = new mongoose.Schema({
+const productSchema = new Schema({
     title: {
         type: String,
         required: true
@@ -21,25 +22,18 @@ const productSchema = new mongoose.Schema({
     },
     price: {
         type: Number,
-        required: true
+        required: [true, "Price should must be numeric value."]
     },
     category: {
         type: String,
-        // required: true
+        required: [ true, "Please select a category for this product." ]
     },
-
     slug: {
         type: String
     },
-    // images: [
-    //     {
-    //         url: String,
-    //         filename: String
-
-    //     }
-
-    // ]
     images: [ImageSchema]
 });
+
 const Product = mongoose.model("Product", productSchema);
+
 module.exports = Product;

@@ -1,7 +1,7 @@
 <%- include("./layouts/header");-%>
     <div class="container">
         <h1>Category</h1>
-        <% category.forEach((cate,i)=>{%>
+        <% categories.forEach((cate, i)=>{ %>
             <div class="accordion" id="accordionCategory">
                 <div>
                     <div class="accordion-item">
@@ -15,13 +15,13 @@
                         <div id='<%= cate.title %>' class="accordion-collapse collapse show"
                             aria-labelledby="headingOne" data-bs-parent="#accordionCategory">
                             <div class="accordion-body">
-                                <% product.forEach((pro)=>{%>
-                                    <% if (pro.category==cate.title) { %>
-                                        <a href="/products/<%=pro._id%> " class='nav-link'>
-                                            <%= pro.title %>
+                                <% products.forEach(({_id, title, category})=>{%>
+                                    <% if (category == cate.title) { %>
+                                        <a href="/products/<%= _id %> " class='nav-link'>
+                                            <%= title %>
                                         </a>
-                                        <% } %>
-                                            <% }) %>
+                                    <% } %>
+                                <% }) %>
                             </div>
                         </div>
                     </div>

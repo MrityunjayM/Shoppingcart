@@ -6,7 +6,8 @@
     <table class="table table-striped">
 
         <thead>
-            <tr>
+            <tr class="text-center">
+                <th>#</th>
                 <th>Category</th>
                 <th>Edit</th>
                 <th>Delete</th>
@@ -15,17 +16,20 @@
         <tbody>
             <% for(var i=0;i<category.length;i++) { %>
                 <tr>
-
+                    <td class="text-center"> <%= i %>  </td>
                     <td>
                         <%= category[i].title %>
                     </td>
-                    <td><a href="/admin/categories/edit-category/<%= category[i]._id %>">Edit</a></td>
-
-
-                    <td>
-
-                        <a class="btn btn-raised btn-danger"
-                            href="/admin/categories/delete-category/<%=category[i]._id%>">Delete</a>
+                    <td class="text-center">
+                        <a href="/admin/categories/edit-category/<%= category[i]._id %>" class="text-primary">
+                            <%- include('../partials/editButton'); %>
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <a class="confirmDeletion text-danger"
+                            href="/admin/categories/delete-category/<%=category[i]._id%>">
+                            <%- include('../partials/deleteButton'); %>
+                        </a>
                     </td>
                 </tr>
                 <%}%>

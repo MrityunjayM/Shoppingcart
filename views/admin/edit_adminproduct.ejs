@@ -4,7 +4,7 @@
     <a href="/admin/products" class="btn btn-primary">Back to all products</a>
     <br><br>
 
-    <form method="post" action="/admin/products/edit-product/<%= product._id %>?_method=PUT" method="post"
+    <form method="post" action="/admin/products/edit-product/<%= product._id %>?_method=PUT" method="POST"
         enctype="multipart/form-data">
 
         <div class="form-group">
@@ -18,14 +18,10 @@
                 placeholder="Description"><%= product.desc %></textarea>
         </div>
 
-
-
         <div class="form-group">
             <label for="">Price</label>
             <input type="text" class="form-control" name="price" value="<%= product.price %>" placeholder="Price">
         </div>
-
-
 
         <div class="mb-3">
             <div class="form-file custom-file">
@@ -33,9 +29,6 @@
                 <input type="file" class="form-file-input" id="image" name="image" multiple>
             </div>
         </div>
-
-
-
 
         <div class="form-group">
             <div class="mb-3">
@@ -45,16 +38,11 @@
                         <input type="checkbox" id="image-<%=i%>" name="deleteImages[]" value="<%=img.filename%>"
                             multiple>
                     </div>
-                    <label for="image-<%=i%>">Delete?</label>
-                    <% })%>
+                    <label for="image-<%=i%>"> Delete ? </label>
+                <% })%>
             </div>
-
         </div>
-
-
         <button class="btn btn-primary">Submit</button>
     </form>
 
-
-
-    <%- include("../layouts/adminfooter"); -%>
+<%- include("../layouts/adminfooter"); -%>

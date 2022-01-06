@@ -4,36 +4,33 @@
     <a href="/admin/products" class="btn btn-primary">Back to all products</a>
     <br><br>
 
-    <form method="post" action="/admin/products/add-product" enctype="multipart/form-data">
+    <form method="POST" action="/admin/products/add-product" enctype="multipart/form-data">
 
         <div class="form-group">
             <label for="">Title</label>
-            <input type="text" class="form-control" name="title" placeholder="Title">
+            <input type="text" class="form-control" name="product[title]" placeholder="Title">
         </div>
 
         <div class="form-group">
             <label for="">Description</label>
-            <textarea name="desc" class="form-control" cols="30" rows="10"
-                placeholder="Description"><% desc %> </textarea>
+            <textarea name="product[desc]" class="form-control" cols="30" rows="10"
+                placeholder="Description"> <%= desc %> </textarea>
         </div>
 
         <div class="form-group">
             <label for="category">Category</label>
-            <select  name="category" id="category">
-                <% categories.forEach(function(cat){ %>
+            <select  name="product[category]" id="category">
+                <% categories.forEach((cat) => { %>
                     <option value="<%= cat.title %>">
                         <%= cat.title %>
                     </option>
-
-                    <% }); %>
+                <% }); %>
             </select>
-
-
         </div>
 
         <div class="form-group">
             <label for="">Price</label>
-            <input type="text" class="form-control" name="price" value="<% price %>" placeholder="Price">
+            <input type="text" class="form-control" name="product[price]" value="<%= price %>" placeholder="Price">
         </div>
 
         <div class="form-group">
@@ -41,7 +38,7 @@
             <input type="file" class="form-control" name="image" id="img" multiple>
         </div>
 
-        <button class="btn btn-default">Submit</button>
+        <button class="btn btn-primary mt-3">Submit</button>
     </form>
 
     <%- include("../layouts/adminfooter"); -%>

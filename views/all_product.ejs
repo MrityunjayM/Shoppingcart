@@ -2,8 +2,8 @@
     <div class="container">
         <div class="container-fluid d-flex justify-content-end mb-3 p-0">
             <div class="btn-group">
-                <button type="button" class="btn btn-light">Filter</button>
-                <button type="button" class="btn btn-outline-light dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                <button type="button" class="btn btn-light py-0">Filter</button>
+                <button type="button" class="btn btn-outline-light py-0 dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                     <span class="visually-hidden"></span>
                 </button>
                 <ul class="dropdown-menu">
@@ -18,13 +18,13 @@
         
         <div class="row align-items-start mx-auto">
             <% products.forEach(({_id, title, price, category, images}) => { %>
-                <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3 mt-4">
                     <div class="card" style="max-width: 18rem;">
                         <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
                             <div class="carousel-inner">
                                 <% images.forEach((img,i) => {%>
                                     <div class="carousel-item <%= (i === 0) ?" active" : "" %> ">
-                                        <img src="<%=img.url%>" class="d-block w-100" alt="<%= title %> ">
+                                        <img src="<%=img.url%>" class="d-block w-100 card-img-top" alt="<%= title %> ">
                                     </div>
                                 <% }) %>
                             </div>
@@ -39,6 +39,11 @@
                                 </button>
                             <% } %>
                         </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item text-end">
+                                <%- include("./partials/cartIcon") %> 
+                            </li>
+                        </ul>
                         <div class="card-body">
                             <h5 class="card-title">
                                 <a href="/products/<%= _id %>" class="nav-link"><%= title %></a>

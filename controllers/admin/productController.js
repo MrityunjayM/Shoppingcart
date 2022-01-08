@@ -26,7 +26,7 @@ module.exports.addProduct = async (req, res, next) => {
     filename,
   }))
   cate.products.push(newProduct)
-
+  console.log(newProduct)
   if (!newProduct.title || !newProduct.desc || !newProduct.price) {
     return next(new AppError("Please fill up all the fields!!!", 400))
   }
@@ -41,7 +41,6 @@ module.exports.addProduct = async (req, res, next) => {
 module.exports.renderProductEditForm = async (req, res) => {
   const { id } = req.params
   const product = await Product.findById(id)
-  const categories = await Category.find({})
 
   if (!product) {
     req.flash("error", "Cannot find the product!")

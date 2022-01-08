@@ -6,18 +6,18 @@
 
     <form method="POST" action="/admin/products/add-product" enctype="multipart/form-data">
 
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="name">Title</label>
             <input id="name" type="text" class="form-control" name="product[title]" placeholder="Title">
         </div>
 
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="desc">Description</label>
             <textarea id="desc" name="product[desc]" class="form-control" cols="30" rows="5"
                 placeholder="Description"> <%= desc %> </textarea>
         </div>
 
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="category">Category</label>
             <select  name="product[category]" id="category">
                 <% categories.forEach((cat) => { %>
@@ -28,12 +28,12 @@
             </select>
         </div>
 
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="price">Price</label>
             <input id="price" type="text" class="form-control" name="product[price]" value="<%= price %>" placeholder="Price">
         </div>
 
-        <div class="form-group">
+        <div class="form-group mb-3">
             <label for="image">Image</label>
             <input type="file" class="form-control" name="image" id="image" multiple>
         </div>

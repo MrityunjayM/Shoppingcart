@@ -5,6 +5,7 @@ const compression = require("compression")
 const mongoose = require("mongoose")
 const ejsMate = require("ejs-mate")
 const session = require("express-session")
+const mongoStore = require("connect-mongodb-session")(session)
 const flash = require("connect-flash")
 const methodOverride = require("method-override")
 const passport = require("passport")
@@ -31,6 +32,11 @@ mongoose.connect(process.env.MONGO_URI, {
 const db = mongoose.connection
 db.on("error", console.error.bind(console, "Connection Error:"))
 db.once("open", () => console.log(`Database connected successfully...`))
+// MongoDBStore config...
+const store = new mongoStore({
+  uri: process.env.MONGO_URI,
+  collection: "session",
+})
 // Express initialization...
 const app = express()
 // view engine setup...
@@ -53,6 +59,7 @@ const sessionConfig = {
     expires: Date.now() + validity(7),
     maxAge: validity(7),
   },
+  store,
 }
 // session initialization...
 app.use(session(sessionConfig))
@@ -78,7 +85,12 @@ app.use("/users", adminUsers)
 app.use("/admin/products", adminProduct)
 app.use("/admin/categories", adminCategories)
 // page not found error...
-app.all("*", (req, res, next) => next(new AppError("Page not found!!!", 404)))
+app.all("*", (req, res) =>
+  res.status(404).render("error", {
+    title: false,
+    message: "404! Page not found...",
+  })
+)
 // Error handeler....
 // VALIDATION ERROR
 app.use((err, req, res, next) => {
@@ -88,9 +100,8 @@ app.use((err, req, res, next) => {
 // ERRORS...
 app.use((err, req, res) => {
   const { statusCode = 500, message = "Oops!! something went wrong" } = err
-  console.log(message)
   if (err) {
-    res.status(statusCode).render("error", { err })
+    res.status(statusCode).render("error", { title: false, message })
   }
 })
 

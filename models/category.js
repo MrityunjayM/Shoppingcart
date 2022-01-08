@@ -1,7 +1,9 @@
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
-const CateogrySchema = new Schema({
+const Product = require("./admin_product")
+
+const cateogrySchema = new Schema({
   title: {
     type: String,
     required: [true, "Title required."],
@@ -15,4 +17,9 @@ const CateogrySchema = new Schema({
   ],
 })
 
-module.exports = mongoose.model("Category", CateogrySchema)
+cateogrySchema.post("findOneAndDelete", async (doc) => {
+  // await Product.findOneAndRemove()
+  await Product.deleteMany(doc.products)
+})
+
+module.exports = mongoose.model("Category", cateogrySchema)

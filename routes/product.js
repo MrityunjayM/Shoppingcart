@@ -19,8 +19,8 @@ router.route("/:id").get(
     const { id: _id } = req.params;
     const product = await Product.findOne({ _id });
     if (!product) {
-        req.flash("error", "Product not found!!!");
-        return res.redirect('/products')
+      req.flash("error", "Product not found!!!")
+      return res.redirect("/products")
     }
     res.status(200).render("show", { product });
   })

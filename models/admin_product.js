@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const { Schema } = mongoose
+const Category = require("./category")
 
 const ImageSchema = new Schema({
   url: String,
@@ -30,6 +31,9 @@ const productSchema = new Schema({
   images: [ImageSchema],
 })
 
-const Product = mongoose.model("Product", productSchema)
+productSchema.post("findOneAndDelete", async (product) => {
+  const productCate = await Category.findById(product.category)
+  productCate.updateOne({ $pull: product })
+})
 
-module.exports = Product
+module.exports = mongoose.model("Product", productSchema)

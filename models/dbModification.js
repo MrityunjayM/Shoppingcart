@@ -1,5 +1,3 @@
-require("dotenv").config()
-
 const mongoose = require("mongoose")
 
 mongoose.connect(process.env.MONGO_URI, {
@@ -9,10 +7,15 @@ mongoose.connect(process.env.MONGO_URI, {
   useFindAndModify: true,
 })
 
-const c = require("./category"),
-  p = require("./admin_product")
+async function modify() {
+  try {
+    await mongoose.connection.dropCollection("categories")
+    await mongoose.connection.dropCollection("products")
+  } catch (error) {
+    console.dir(error)
+  } finally {
+    mongoose.disconnect()
+  }
+}
 
-c.deleteMany({})
-p.deleteMany({})
-
-mongoose.disconnect()
+modify()

@@ -22,11 +22,13 @@
                     <td>
                         <%= product.title %>
                     </td>
-                    <td>$<%= product.price %>
+                    
+                    <td>
+                        $<%= product.price %>
                     </td>
 
                     <td>
-                        <%= product.category %>
+                        <%= product.category.title %>
                     </td>
 
                     <td>
@@ -36,8 +38,7 @@
                                     <div class="carousel-item <%= i === 0 ? 'active' : ''%>">
                                         <img src="<%= img.thumbnail%>" class="d-block w-100" alt="">
                                     </div>
-                                    <% }) %>
-
+                                <% }) %>
                             </div>
                             <% if(product.images.length> 1) {%>
                                 <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel"
@@ -53,11 +54,13 @@
                             <% } %>
                         </div>
                     </td>
+
                     <td>
                         <a href="/admin/products/edit-product/<%= product._id %>" class="text-primary">
                             <%- include('../partials/editButton'); %>
                         </a>
                     </td>
+                    
                     <td>
                         <a class="confirmDeletion text-danger" href="/admin/products/edit-product/<%= product._id %>/delete">
                             <%- include('../partials/deleteButton'); %>

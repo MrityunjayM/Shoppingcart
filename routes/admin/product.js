@@ -12,7 +12,7 @@ const {
   renderProductEditForm,
   updateProduct,
   deleteProduct,
-} = require("../../controllers/adminControllers")
+} = require("../../controllers/admin/productController")
 
 router.get("/", isLoggedIn, isAdmin, wrapAsync(getAllProducts))
 

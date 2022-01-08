@@ -18,6 +18,7 @@ const adminProduct = require("./routes/admin/product")
 const adminUsers = require("./routes/admin/user")
 // Public routes
 const Product = require("./routes/product")
+const byCategory = require("./routes/productFilter")
 const Home = require("./routes/homePage")
 // mongoDB config...
 mongoose.connect(process.env.MONGO_URI, {
@@ -72,9 +73,12 @@ app.use((req, res, next) => {
 // ROUTES
 app.get("/", Home)
 app.use("/products", Product)
+app.use("/categories", byCategory)
 app.use("/users", adminUsers)
 app.use("/admin/products", adminProduct)
 app.use("/admin/categories", adminCategories)
+// page not found error...
+app.all("*", (req, res, next) => next(new AppError("Page not found!!!", 404)))
 // Error handeler....
 // VALIDATION ERROR
 app.use((err, req, res, next) => {
@@ -82,7 +86,7 @@ app.use((err, req, res, next) => {
   next(err)
 })
 // ERRORS...
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   const { statusCode = 500, message = "Oops!! something went wrong" } = err
   console.log(message)
   if (err) {
@@ -93,7 +97,7 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT
 
 app.listen(PORT, () => {
-  console.log(`APP IS LISTENING ON http://localhost:${PORT}`)
+  console.log(`App is listening on http://localhost:${PORT}`)
 })
 
-process.on("uncaughtException", (e) => console.log(e))
+process.on("uncaughtException", (e) => console.error(e))

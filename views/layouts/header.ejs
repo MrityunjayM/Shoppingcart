@@ -13,8 +13,8 @@
 </head>
 
 <body>
-    <header class="container">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <header class="container p-0">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-3">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">cmsShoppingCart</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -25,10 +25,10 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="nav navbar-nav">
                         <li class="nav-link">
-                            <a class="nav-link active" aria-current="page" href="/">Home</a>
+                            <a class="nav-link active" aria-current="page" href="/products">Products</a>
                         </li>
                         <li class="nav-link">
-                            <a class="nav-link active" aria-current="page" href="/products">Products</a>
+                            <a class="nav-link active" aria-current="page" href="#">About Us</a>
                         </li>
                     </ul>
     
@@ -39,10 +39,10 @@
                         <% }else{ %>
                             <div class="py-2">
                                 <span class="badge bg-info">
-                                    <%= currentUser.username %>
+                                    <%= currentUser.name %>
                                 </span>
                                 <% if (currentUser.admin) { %>
-                                    <a href="/admin/products/">
+                                    <a href="/admin/products/" target="_blank">
                                         <span class="badge bg-danger">Admin</span>
                                     </a>
                                 <% } %>
@@ -54,4 +54,4 @@
             </div>
         </nav>
     </header>
-    <main class="container mt-4">
+    <main class="container mt-4 px-3">

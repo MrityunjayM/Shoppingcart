@@ -1,19 +1,19 @@
 <%- include('../layouts/adminheader'); -%>
 
-    <h2 class="page-title">Add a product</h2>
-    <a href="/admin/products" class="btn btn-primary">Back to all products</a>
+    <h2 class="page-title"> Add a product </h2>
+    <a href="/admin/products" class="btn btn-primary"> Go Back </a>
     <br><br>
 
     <form method="POST" action="/admin/products/add-product" enctype="multipart/form-data">
 
         <div class="form-group">
-            <label for="">Title</label>
-            <input type="text" class="form-control" name="product[title]" placeholder="Title">
+            <label for="name">Title</label>
+            <input id="name" type="text" class="form-control" name="product[title]" placeholder="Title">
         </div>
 
         <div class="form-group">
-            <label for="">Description</label>
-            <textarea name="product[desc]" class="form-control" cols="30" rows="10"
+            <label for="desc">Description</label>
+            <textarea id="desc" name="product[desc]" class="form-control" cols="30" rows="5"
                 placeholder="Description"> <%= desc %> </textarea>
         </div>
 
@@ -29,13 +29,13 @@
         </div>
 
         <div class="form-group">
-            <label for="">Price</label>
-            <input type="text" class="form-control" name="product[price]" value="<%= price %>" placeholder="Price">
+            <label for="price">Price</label>
+            <input id="price" type="text" class="form-control" name="product[price]" value="<%= price %>" placeholder="Price">
         </div>
 
         <div class="form-group">
             <label for="image">Image</label>
-            <input type="file" class="form-control" name="image" id="img" multiple>
+            <input type="file" class="form-control" name="image" id="image" multiple>
         </div>
 
         <button class="btn btn-primary mt-3">Submit</button>

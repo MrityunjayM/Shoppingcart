@@ -1,13 +1,18 @@
-const mongoose = require("mongoose");
-const CateogrySchema = new mongoose.Schema({
-    title: {
-        type: String,
-        required: true
+const mongoose = require("mongoose")
+const Schema = mongoose.Schema
+
+const CateogrySchema = new Schema({
+  title: {
+    type: String,
+    required: [true, "Title required."],
+  },
+  slug: String,
+  products: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Product",
     },
-    slug: {
-        type: String,
-        // required: true
-    }
-});
-const Cateogry = mongoose.model("Cateogry", CateogrySchema);
-module.exports = Cateogry;
+  ],
+})
+
+module.exports = mongoose.model("Category", CateogrySchema)

@@ -1,39 +1,35 @@
-
-const mongoose = require("mongoose");
-const { Schema } = mongoose;
+const mongoose = require("mongoose")
+const { Schema } = mongoose
 
 const ImageSchema = new Schema({
-    url: String,
-    filename: String
-});
+  url: String,
+  filename: String,
+})
 
-ImageSchema.virtual('thumbnail').get(function () {
-    return this.url.replace('/upload', '/upload/w_200');
-});
+ImageSchema.virtual("thumbnail").get(function () {
+  return this.url.replace("/upload", "/upload/w_200")
+})
 
 const productSchema = new Schema({
-    title: {
-        type: String,
-        required: true
-    },
-    desc: {
-        type: String,
-        required: true
-    },
-    price: {
-        type: Number,
-        required: [true, "Price should must be numeric value."]
-    },
-    category: {
-        type: String,
-        required: [ true, "Please select a category for this product." ]
-    },
-    slug: {
-        type: String
-    },
-    images: [ImageSchema]
-});
+  title: {
+    type: String,
+    required: [true, "Title is required."],
+  },
+  desc: {
+    type: String,
+    required: [true, "Description is required."],
+  },
+  price: {
+    type: Number,
+    required: [true, "Price should must be a numeric value."],
+  },
+  category: {
+    type: Schema.Types.ObjectId,
+    ref: "Category",
+  },
+  images: [ImageSchema],
+})
 
-const Product = mongoose.model("Product", productSchema);
+const Product = mongoose.model("Product", productSchema)
 
-module.exports = Product;
+module.exports = Product

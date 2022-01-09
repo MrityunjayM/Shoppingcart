@@ -18,8 +18,7 @@ const cateogrySchema = new Schema({
 })
 
 cateogrySchema.post("findOneAndDelete", async (doc) => {
-  // await Product.findOneAndRemove()
-  await Product.deleteMany(doc.products)
+  await Product.deleteMany({ _id: { $in: doc.products } })
 })
 
 module.exports = mongoose.model("Category", cateogrySchema)

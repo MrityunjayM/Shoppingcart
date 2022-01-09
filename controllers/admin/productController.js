@@ -25,7 +25,7 @@ module.exports.addProduct = async (req, res, next) => {
     url: path,
     filename,
   }))
-  cate.products.push(newProduct)
+  cate.products.push(newProduct._id)
   console.log(newProduct)
   if (!newProduct.title || !newProduct.desc || !newProduct.price) {
     return next(new AppError("Please fill up all the fields!!!", 400))

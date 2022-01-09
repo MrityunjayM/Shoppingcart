@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
+const category = require("./category")
 const { Schema } = mongoose
-const Category = require("./category")
 
 const ImageSchema = new Schema({
   url: String,
@@ -8,7 +8,7 @@ const ImageSchema = new Schema({
 })
 
 ImageSchema.virtual("thumbnail").get(function () {
-  return this.url.replace("/upload", "/upload/w_200")
+  return this.url.replace("/upload", "/upload/w_150")
 })
 
 const productSchema = new Schema({
@@ -32,8 +32,9 @@ const productSchema = new Schema({
 })
 
 productSchema.post("findOneAndDelete", async (product) => {
-  const productCate = await Category.findById(product.category)
-  productCate.updateOne({ $pull: product })
+  await category.findByIdAndUpdate(product.category, {
+    $pull: { products: product },
+  })
 })
 
 module.exports = mongoose.model("Product", productSchema)

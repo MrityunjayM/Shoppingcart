@@ -13,7 +13,8 @@
 
 
 
-
+let hello;
+console.log(typeof hello);
 
 
 //ye include hona hai navbar me but its not working......

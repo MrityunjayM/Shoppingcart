@@ -5,41 +5,53 @@ const Page = require("../models/page");
 const Categories = require("../models/category");
 const User = require("../models/user");
 const Cart = require("../models/cart");
-const { isAdmin, isLoggedIn } = require("../middleware");
-const { createCollection } = require("../models/admin_product");
+const { isLoggedIn } = require("../middleware");
+// const { createCollection } = require("../models/admin_product");
 
-router.get('/', (req, res) => {
-    Product.find({})
-    .then(product => {
-        Page.find({})
-        .then(page => {
-            res.render('index', {
-                page, product
-            });
-        })
-        .catch(e => next(e));
-    })
-    .catch(e => next(e));
+router.get('/', async (req, res, next) => {
+
+    try{
+        const page = await Page.find({});
+        const product = await Product.find({});
+        if(typeof req.user == 'undefined'){ 
+            res.render('index', {page, product});
+        } else {
+            const carts = await Cart.find({});
+            res.render('index', {page, product, carts});
+        }
+    }
+    catch(e){
+        next(e);
+    }
 });
 
-router.get("/:title", async (req, res) => {
+router.get("/:title", async (req, res, next) => {
     const title = req.params.title;
-    // console.log(title);
+
     if (title == "products") {
-        // res.writeHead(302, { location: '/' });
         Categories.find({})
         .then((category) => {
             Product.find({})
             .populate('images')
             .then(product => {
                 Page.find({})
-                .then(page =>{
-                    // console.log(page, category, product);
-                    res.render("all_product", {
-                        category,
-                        product,                    
-                        page
-                    });
+                .then(async (page) =>{
+                    if(typeof req.user == 'undefined'){   
+                        res.render("all_product", {
+                            category,
+                            product,                    
+                            page
+                        });
+                    } else {
+                        // console.log(req.user);
+                        const carts = await Cart.find({});
+                        res.render("all_product", {
+                            category,
+                            product,                    
+                            page,
+                            carts
+                        });
+                    }
                 })
                 .catch(e => next(e));
             })
@@ -47,26 +59,23 @@ router.get("/:title", async (req, res) => {
         })
         .catch(e => next(e));
     } else {
-        Page.find({})
-        .then(page =>{
-            res.render("explanation", {
+        const page = await Page.find({});
+        if(typeof req.user == 'undefined'){   
+            res.render("explanation", {                    
+                page,
+                title
+            });
+        } else {
+            // console.log(req.user);
+            const carts = await Cart.find({});
+            res.render("explanation", {                    
                 page,
                 title,
+                carts
             });
-        })
-        .catch(e => next(e));
+        }
     }
 });
-
-// router.get("/products", (req, res) => {
-//     Categories.find((err, category) => {
-//         res.render("all_product", {
-//             category,
-//             product,
-//             page
-//         })
-//     })
-// })
 
 router.get("/products/:id", async (req, res) => {
 
@@ -81,50 +90,47 @@ router.get("/products/:id", async (req, res) => {
         .catch(e => next(e));
     })
     .catch(e => next(e));
-
-    // const product = await Product.findById(req.params.id);
-    // res.render("show", { product, page });
 });
 
 router.get("/cart/:id", isLoggedIn, async (req, res, next) => {
+
     var count = 0, addCart = 0
+
     // for going back to 
-    const backURL = req.header('Referer') || '/';
+    const backURL = req.header('Referer');
     const product = await Product.findById(req.params.id);
-    console.log(product);
 
     Cart.find({ userId: req.user._id })
         .then(cart => {
-            // console.log(cart);
-            if (cart) {
-                // console.log(cart.length);
-                cart.forEach(async (p) => {
-                    // console.log(p);
+            if (cart.length > 0) {
+                console.log('Before',cart);
+                cart.forEach(p => {
                     if (p.products[0] == req.params.id) {
-                        await Cart.findByIdAndUpdate(p._id,{
+                        Cart.findByIdAndUpdate(cart[0]._id,{
                             quantity: p.quantity + 1,
                             totalPrice: p.totalPrice + product.price
-                        }, (err, result) => {
-                                if (err) {
-                                    console.log(err);
-                                }
-                                console.log("###", result);
-                        });
-                        // console.log("same added")
+                        })
+                        .then(result => {
+                            console.log("###", result);
+                        },e => next(e))
+                        .catch(e => next(e));
+
                         if (backURL == "http://localhost:3000/all/mycart") {
-                            res.redirect(backURL || '/');
+                            res.redirect(backURL);
                         }
                         else {
-                            res.redirect('/products/'+ req.params.id);
+                            res.redirect('/products');
                         }
-                    }
-                })
 
-                cart.forEach((p) => {
-                    if (p.products[0] != req.params.id) {
+                    } else if( p.products[0] != req.params.id){
                         count += 1;
                         if (count == cart.length) {
-                            addCart = new Cart({ userId: req.user._id, products: [req.params.id], quantity: 1 });
+                            addCart = new Cart({
+                                userId: req.user._id,
+                                products: [req.params.id],
+                                quantity: 1 
+                            });
+
                             addCart.totalPrice = product.price;
                             addCart.save()
                             .then(() => {
@@ -134,8 +140,8 @@ router.get("/cart/:id", isLoggedIn, async (req, res, next) => {
                             .catch(err => next(err));
                         }
                     }
+                });
 
-                })
             } else {
                 console.log("balajee");
 
@@ -147,7 +153,7 @@ router.get("/cart/:id", isLoggedIn, async (req, res, next) => {
                 addCart.save()
                 .then(() => {
                     console.log("added");
-                    res.send("okkkk")
+                    res.redirect(backURL);
                 })
                 .catch(err => next(err));
             }
@@ -158,6 +164,10 @@ router.get("/cart/:id", isLoggedIn, async (req, res, next) => {
 router.get("/all/mycart", isLoggedIn, async (req, res) => {
     const total = 0;
     const qty = 0;
+
+    const product = await Product.find({});
+    const page = await Page.find({});
+    // const product = await Product.find({});
     Cart.find({ userId: req.user._id })
     .then(carts => {
         res.render("mycart", {
@@ -169,7 +179,6 @@ router.get("/all/mycart", isLoggedIn, async (req, res) => {
         })
     })
     .catch(e => next(e));
-
 });
 
 router.get("/mycart/:id", isLoggedIn, async (req, res) => {

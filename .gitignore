@@ -1,9 +1,9 @@
-node_modules
+/node_modules
 
-.env
+/.env
 
-garbage.js
+/garbage.js
 
-.vscode
+/.vscode
 
-routes..
+/routes

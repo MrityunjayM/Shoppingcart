@@ -8,13 +8,18 @@
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
-    <link rel="shortcut icon" href="about:blank">
+    <!-- <link rel="shortcut icon" href="about:blank"> -->
+    <style>
+        .navbar a{
+            color: azure !important;
+        }
+    </style>
 
 </head>
 
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary ">
         <div class="container">
             <a class="navbar-brand" href="/">cmsShoppingCart</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -44,8 +49,8 @@
                 </ul>
                 <div class="navbar-nav ms-auto">
                     <!-- <a href="/all/mycart" class="nav-link">My cart</a> -->
-                    <% if(typeof carts !=="undefined" ){ %>
-                        <a href="/mycart" class="nav-link">My cart(<%=carts.length %>)</a>
+                    <% if(typeof carts !== "undefined" ){ %>
+                        <a href="/all/mycart" class="nav-link">My cart(<%=carts.length %>)</a>
                         <% } else{ %>
                             <a href="/" class="nav-link">My cart(0)</a>
                             <% } %>

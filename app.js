@@ -2,7 +2,6 @@ if (process.env.NODE_ENV !== "production") {
     require('dotenv').config();
 }
 const express = require('express');
-const config = require('./config');
 const path = require('path');
 const mongoose = require('mongoose');
 // const ejsMate = require('ejs-mate');
@@ -30,14 +29,13 @@ mongoose.connect(process.env.MONGO_ATLAS_URL, {
 });
 
 const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
+db.on("error", console.error.bind(console, "Connection error:"));
 db.once("open", () => {
     console.log("Database connected");
 });
 
 const app = express();
 
-// app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
@@ -47,12 +45,12 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 const sessionConfig = {
     secret: process.env.SECRET_KEY,
-    resave: !false,
+    resave: false,
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
-        expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-        maxAge: 1000 * 60 * 60 * 24 * 7
+        // expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+        // maxAge: 1000 * 60 * 60 * 24 * 7
     }
 }
 
@@ -91,7 +89,7 @@ const handleValidationErr = err => {
 app.use((err, req, res, next) => {
     // console.log(err.name);
     //We can single out particular types of Mongoose Errors:
-    if (err.name === 'ValidationError') err = handleValidationErr(err)
+    err.name === 'ValidationError' ? err = handleValidationErr(err) : next();
     next(err);
 });
 
@@ -99,11 +97,10 @@ app.use((err, req, res, next) => {
     const { statusCode = 500, message = 'Something went wrong' } = err;
     console.log(message);
     if (err) {
-        res.status(statusCode).render('error', { err })
+        res.status(statusCode).render('error', err );
     }
-
 });
 
 app.listen(process.env.PORT, () => {
-    console.log(`APP IS LISTENING ON PORT http://${process.env.HOST}:${process.env.PORT}`)
+    console.log(`SERVER RUNNING ON http://${process.env.HOST}:${process.env.PORT}/`)
 });

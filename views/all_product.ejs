@@ -12,10 +12,10 @@
                                 <%= cate.title %>
                             </button>
                         </h2>
-                        <div id='<%= cate.title %>' class="accordion-collapse collapse show"
+                        <div id='<%= cate.title %>' class="accordion-collapse collapse <%= i == 0? 'show' : '' %>"
                             aria-labelledby="headingOne" data-bs-parent="#accordionCategory">
                             <div class="accordion-body">
-                                <% product.forEach((pro)=>{%>
+                                <% product.forEach((pro) =>{%>
                                     <% if (pro.category == cate.title) { %>
                                         <a href="/products/<%=pro._id%> " class='nav-link'>
                                             <%= pro.title %>

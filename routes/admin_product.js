@@ -6,37 +6,33 @@ const wrapAsync = require("../controlError/wrapasync");
 const AppError = require("../controlError/AppError");
 const { isAdmin, isLoggedIn } = require("../middleware");
 const multer = require('multer');
-const { storage } = require("../cloudinary/index");
+const { storage, cloudinary } = require("../cloudinary/index");
 const upload = multer({ storage });
-const { cloudinary } = require("../cloudinary");
-
-
 
 router.get("/", wrapAsync(async (req, res, next) => {
     const products = await Product.find({});
     res.render("admin/products", { products });
 }));
 
-
 router.get('/add-product', isLoggedIn, isAdmin, wrapAsync(async (req, res, next) => {
-    // const title = "";
+
     const desc = "";
     const price = "";
-    Category.find((err, categories) => {
-        console.log(categories)
+    Category.find({}).then(categories => {
+        console.log(categories);
         res.render('admin/add_product', {
             // title: title,
-            desc: desc,
-            categories: categories,
-            price: price
+            desc,
+            categories,
+            price
         });
-
-    }).then(err => next(err))
+    }, e => next(e))
+    .catch(e => next(e));
 }));
 
 router.post("/add-product", isLoggedIn, isAdmin, upload.array("image"), (req, res, next) => {
     const newProduct = new Product(req.body);
-    console.log(newProduct.category)
+    // console.log(newProduct.category);
     newProduct.images = req.files.map(f => ({ url: f.path, filename: f.filename }))
     // console.log(req.files);
     if (!newProduct.title || !newProduct.desc || !newProduct.price) {
